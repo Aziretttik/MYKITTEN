@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<section class="registration_section" style="padding: 80px 0;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card" style="border: none; box-shadow: 0 2px 15px rgba(0,0,0,0.1);">
+                    <div class="row g-0">
+                        <!-- Левая часть с изображением -->
+                        <div class="col-md-6">
+                            <div style="height: 100%; min-height: 400px; background-color: #f8f9fa;">
+                                <img src="{% static 'images/register.jpg' %}" alt="Registration"
+                                     style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                        </div>
+
+                        <!-- Правая часть с формой -->
+                        <div class="col-md-6">
+                            <div class="card-body p-5">
+                                <h2 class="text-center mb-4" style="color: #2c3e50; font-weight: 700;">Регистрация</h2>
+
+                                <form action="{% url 'user_register' %}" method="POST">
+                                    {% csrf_token %}
+
+                                    <div class="mb-3">
+                                        <label class="form-label" style="color: #505050; font-weight: 500;">Email</label>
+                                        <input type="email" name="email" class="form-control"
+                                               style="padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px;"
+                                               required>
+                                        {% if form.email.errors %}
+                                            <div class="text-danger">
+                                                {{ form.email.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label" style="color: #505050; font-weight: 500;">Номер телефона</label>
+                                        <input type="tel" name="phone_number" class="form-control"
+                                               style="padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px;"
+                                               required>
+                                        {% if form.phone_number.errors %}
+                                            <div class="text-danger">
+                                                {{ form.phone_number.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label" style="color: #505050; font-weight: 500;">Пароль</label>
+                                        <input type="password" name="password1" class="form-control"
+                                               style="padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px;"
+                                               required>
+                                        {% if form.password1.errors %}
+                                            <div class="text-danger">
+                                                {{ form.password1.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label" style="color: #505050; font-weight: 500;">Подтверждение пароля</label>
+                                        <input type="password" name="password2" class="form-control"
+                                               style="padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px;"
+                                               required>
+                                        {% if form.password2.errors %}
+                                            <div class="text-danger">
+                                                {{ form.password2.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" id="terms" required>
+                                        <label class="form-check-label" for="terms" style="color: #505050;">
+                                            Я согласен с условиями использования
+                                        </label>
+                                    </div>
+
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-primary"
+                                                style="padding: 12px; font-weight: 600; background-color: #007bff; border: none;">
+                                            Зарегистрироваться
+                                        </button>
+                                    </div>
+                                </form>
+
+                                <p class="text-center mt-4" style="color: #505050;">
+                                    Уже есть аккаунт?
+                                    <a href="{% url 'user_login' %}" style="color: #007bff; text-decoration: none; font-weight: 500;">Войти</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

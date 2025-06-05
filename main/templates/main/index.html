@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Главная - Приют для кошек{% endblock %}
+
+{% block content %}
+
+<section class="features-section" style="padding: 20px 0;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4 mb-3">
+                <a href="{% url 'cat_catalog' %}" class="text-decoration-none">
+                    <div class="feature-card" style="position: relative; overflow: hidden; border-radius: 15px; height: 350px;">
+                        <img src="{% static 'images/mylogo1.jpg' %}" alt="Помощь кошкам" style="width: 100%; height: 100%; object-fit: cover;">
+
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 mb-3">
+                <a href="{% url 'cat_catalog' %}" class="text-decoration-none">
+                    <div class="feature-card" style="position: relative; overflow: hidden; border-radius: 15px; height: 350px;">
+                        <img src="{% static 'images/mylogo2.jpg' %}" alt="Взять котика" style="width: 100%; height: 100%; object-fit: cover;">
+
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 mb-3">
+                <a href="{% url 'cat_catalog' %}" class="text-decoration-none">
+                    <div class="feature-card" style="position: relative; overflow: hidden; border-radius: 15px; height: 350px;">
+                        <img src="{% static 'images/mylogo3.jpg' %}" alt="Стать волонтером" style="width: 100%; height: 100%; object-fit: cover;">
+
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="banner-section" style="margin: 40px 0;">
+    <div class="container-fluid">
+        <div class="banner" style="background-color: #007bff; padding: 60px 0; text-align: center; width: 100%;">
+            <h1 style="color: #ffffff; font-size: 4.5rem; font-weight: 700; letter-spacing: 8px; margin: 0; text-transform: uppercase; font-family: 'Arial Black', Arial, sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">
+                MYKITTEN
+            </h1>
+        </div>
+    </div>
+</section>
+
+
+<section class="slider_section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="detail-box" style="color: #333;">
+                    <h1 style="color: #2c3e50; font-weight: 700; margin-bottom: 20px;">
+                        Миссия <br>
+                        нашего приюта
+                    </h1>
+                    <p style="color: #505050; font-size: 18px; line-height: 1.6; margin-bottom: 30px;">
+                        Завести питомца – это важный шаг. Наши специалисты помогут вам выбрать кошку, которая идеально подойдёт вашему образу жизни. Все наши питомцы проходят осмотр у ветеринара, прививаются и готовы стать частью вашей семьи. Приходите к нам в приют или посмотрите анкеты кошек на сайте!
+                    </p>
+                    <div class="btn-box">
+                        {% if user.is_authenticated and user.is_superuser %}
+                            <a href="{% url 'create_cat' %}" class="btn btn-primary" style="background-color: #007bff; border-color: #007bff; padding: 15px 60px; font-weight: 600; border-radius: 30px; width: 300px; display: inline-block;">Добавить кошку</a>
+                        {% else %}
+                            <a href="#contact" class="btn btn-primary" style="background-color: #007bff; border-color: #007bff; padding: 15px 60px; font-weight: 600; border-radius: 30px; width: 300px; display: inline-block;">Перейти к анкетам</a>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="img-box">
+                    <img src="{% static 'images/herohero.jpg' %}" alt="Hero image">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cat-gallery-section" style="margin-top: 0; padding-top: 20px; padding-bottom: 20px;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4 mb-3">
+                <a href="{% url 'cat_catalog' %}" class="text-decoration-none">
+                    <div class="card h-100" style="transition: transform 0.3s ease;">
+                        <img src="{% static 'images/cat1.jpg' %}" class="card-img-top" alt="Кошка 1" style="height: 300px; object-fit: cover; border-radius: 10px;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-dark">Дарите лапкам тепло – найдите другу дом!</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 mb-3">
+                <a href="{% url 'cat_catalog' %}" class="text-decoration-none">
+                    <div class="card h-100" style="transition: transform 0.3s ease;">
+                        <img src="{% static 'images/cat22.jpg' %}" class="card-img-top" alt="Кошка 2" style="height: 300px; object-fit: cover; border-radius: 10px;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-dark">Каждая кошка заслуживает любовь. Подари ей семью!</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 mb-3">
+                <a href="{% url 'cat_catalog' %}" class="text-decoration-none">
+                    <div class="card h-100" style="transition: transform 0.3s ease;">
+                        <img src="{% static 'images/cat3.jpg' %}" class="card-img-top" alt="Кошка 3" style="height: 300px; object-fit: cover; border-radius: 10px;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-dark">Спасая одну кошку, ты меняешь её мир!</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cat-gallery-section" style="padding: 20px 0;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4 mb-3">
+                <a href="{% url 'cat_catalog' %}" class="text-decoration-none">
+                    <div class="card h-100" style="transition: transform 0.3s ease;">
+                        <img src="{% static 'images/cat4.jpg' %}" class="card-img-top" alt="Кошка 1" style="height: 300px; object-fit: cover; border-radius: 10px;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-dark">Дом там, где мурчат кошки!</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 mb-3">
+                <a href="{% url 'cat_catalog' %}" class="text-decoration-none">
+                    <div class="card h-100" style="transition: transform 0.3s ease;">
+                        <img src="{% static 'images/cat5.jpg' %}" class="card-img-top" alt="Кошка 2" style="height: 300px; object-fit: cover; border-radius: 10px;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-dark">Не покупай – возьми из приюта!</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 mb-3">
+                <a href="{% url 'cat_catalog' %}" class="text-decoration-none">
+                    <div class="card h-100" style="transition: transform 0.3s ease;">
+                        <img src="{% static 'images/cat6.jpg' %}" class="card-img-top" alt="Кошка 3" style="height: 300px; object-fit: cover; border-radius: 10px;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-dark">Вторая жизнь для пушистого друга – в твоих руках!</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+<!-- О нас секция -->
+<section class="about_section layout_padding" id="about">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>Завести <span>питомца</span></h2>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="img-box">
+                    <img src="{% static 'images/3cats.jpg' %}" alt="About us">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="detail-box">
+                    <h3>Как взять кошку из приюта</h3>
+                    <p>
+                        Завести питомца – это важный шаг. Наши специалисты помогут вам выбрать кошку, которая идеально подойдёт вашему образу жизни. Все наши питомцы проходят осмотр у ветеринара, прививаются и готовы стать частью вашей семьи. Приходите к нам в приют или посмотрите анкеты кошек на сайте!
+                    </p>
+                    <a href="{% url 'cat_catalog' %}" class="btn btn-primary mt-3">выбрать котика</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+    .card {
+    cursor: pointer;
+}
+
+.feature-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.feature-overlay h4 {
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+.container {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+</style>
+
+{% endblock %}

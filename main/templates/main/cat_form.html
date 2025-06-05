@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if cat %}Редактировать {{ cat.name }}{% else %}Добавить нового котика{% endif %}
+{% endblock %}
+
+{% block content %}
+<style>
+    .cat-form-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 30px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    }
+
+    .cat-form-title {
+        color: #0056b3;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    .cat-form label {
+        display: block;
+        margin-bottom: 8px;
+        color: #444;
+        font-weight: 500;
+    }
+    .cat-form input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.form-check label {
+    margin-bottom: 0;
+    margin-left: 8px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 10px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: white;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: #0056b3;
+}
+
+.errorlist {
+    color: #dc3545;
+    list-style: none;
+    padding: 0;
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+
+    .cat-form input,
+    .cat-form textarea {
+        width: 100%;
+        padding: 10px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        transition: border-color 0.3s ease;
+    }
+
+    .cat-form input:focus,
+    .cat-form textarea:focus {
+        outline: none;
+        border-color: #0056b3;
+    }
+
+    .cat-form textarea {
+        min-height: 150px;
+        resize: vertical;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .submit-button {
+        background-color: #0056b3;
+        color: white;
+        padding: 12px 30px;
+        border: 2px solid #0056b3;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .submit-button:hover {
+        background-color: #003d80;
+        border-color: #003d80;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,86,179,0.3);
+    }
+
+    .cancel-button {
+        background-color: transparent;
+        color: #0056b3;
+        padding: 12px 30px;
+        border: 2px solid #0056b3;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .cancel-button:hover {
+        background-color: #f8f9fa;
+        color: #003d80;
+        border-color: #003d80;
+    }
+
+    .current-image {
+        max-width: 300px;
+        margin: 20px 0;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+</style>
+
+<div class="cat-form-container">
+    <h1 class="cat-form-title">
+        {% if cat %}Редактировать {{ cat.name }}{% else %}Добавить нового котика{% endif %}
+    </h1>
+
+    <form method="post" enctype="multipart/form-data" class="cat-form">
+        {% csrf_token %}
+
+        {% if cat and cat.photo %}
+        <div>
+            <label>Текущее фото:</label>
+            <img src="{{ cat.photo.url }}" alt="{{ cat.name }}" class="current-image">
+        </div>
+        {% endif %}
+
+        {% for field in form %}
+<div class="form-group {% if field.field.widget.input_type == 'checkbox' %}form-check{% endif %}">
+    {% if field.field.widget.input_type != 'checkbox' %}
+        {{ field.label_tag }}
+    {% endif %}
+    {{ field }}
+    {% if field.field.widget.input_type == 'checkbox' %}
+        {{ field.label_tag }}
+    {% endif %}
+    {% if field.errors %}
+        <ul class="errorlist">
+            {% for error in field.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if field.help_text %}
+        <small class="form-text text-muted">{{ field.help_text }}</small>
+    {% endif %}
+</div>
+{% endfor %}
+
+
+        <div class="button-container">
+            <a href="{% if cat %}{% url 'cat_detail' cat.id %}{% else %}{% url 'cat_catalog' %}{% endif %}"
+               class="cancel-button">Отмена</a>
+            <button type="submit" class="submit-button">
+                {% if cat %}Сохранить изменения{% else %}Добавить котика{% endif %}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

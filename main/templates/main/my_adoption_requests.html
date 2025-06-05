@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Мои заявки на усыновление{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Мои заявки на усыновление</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-primary">
+                <tr>
+                    <th>Дата заявки</th>
+                    <th>Котик</th>
+                    <th>Ваше сообщение</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in requests %}
+                <tr>
+                    <td>{{ request.created_at|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        <a href="{% url 'cat_detail' request.cat.id %}">
+                            {{ request.cat.name }}
+                        </a>
+                    </td>
+                    <td>{{ request.message }}</td>
+                    <td>
+                        <span class="badge {% if request.status == 'pending' %}bg-warning
+                            {% elif request.status == 'approved' %}bg-success
+                            {% elif request.status == 'rejected' %}bg-danger
+                            {% endif %}">
+                            {% if request.status == 'pending' %}На рассмотрении
+                            {% elif request.status == 'approved' %}Одобрено
+                            {% elif request.status == 'rejected' %}Отклонено
+                            {% endif %}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">
+                        У вас пока нет заявок на усыновление.
+                        <a href="{% url 'cat_catalog' %}">Посмотреть котиков</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

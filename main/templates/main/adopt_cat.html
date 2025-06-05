@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}Усыновить {{ cat.name }}{% endblock %}
+
+{% block content %}
+<style>
+    .adoption-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 30px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    }
+
+    .adoption-title {
+        color: #0056b3;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    .adoption-form label {
+        display: block;
+        margin-bottom: 8px;
+        color: #444;
+        font-weight: 500;
+    }
+
+    .adoption-form input,
+    .adoption-form textarea {
+        width: 100%;
+        padding: 10px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        transition: border-color 0.3s ease;
+    }
+
+    .adoption-form input:focus,
+    .adoption-form textarea:focus {
+        outline: none;
+        border-color: #0056b3;
+    }
+
+    .adoption-form textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .submit-button {
+        background-color: #0056b3;
+        color: white;
+        padding: 12px 30px;
+        border: 2px solid #0056b3;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .submit-button:hover {
+        background-color: #003d80;
+        border-color: #003d80;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,86,179,0.3);
+    }
+
+    .cancel-button {
+        background-color: transparent;
+        color: #0056b3;
+        padding: 12px 30px;
+        border: 2px solid #0056b3;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .cancel-button:hover {
+        background-color: #f8f9fa;
+        color: #003d80;
+        border-color: #003d80;
+    }
+
+    /* Стили для сообщений об ошибках */
+    .errorlist {
+        color: #dc3545;
+        list-style: none;
+        padding: 0;
+        margin: 5px 0 15px;
+        font-size: 0.9rem;
+    }
+
+    /* Адаптивность для мобильных устройств */
+    @media (max-width: 768px) {
+        .adoption-container {
+            margin: 20px;
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="adoption-container">
+    <h1 class="adoption-title">Усыновление {{ cat.name }}</h1>
+    <form method="post" class="adoption-form">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <ul class="errorlist">
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <div class="button-container">
+            <a href="{% url 'cat_detail' cat.id %}" class="cancel-button">Отмена</a>
+            <button type="submit" class="submit-button">Отправить заявку</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

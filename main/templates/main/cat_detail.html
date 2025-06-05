@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ cat.name }}{% endblock %}
+
+{% block content %}
+<style>
+    .cat-detail-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .cat-detail-image {
+        width: 100%;
+        max-height: 400px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .cat-info {
+        margin-top: 30px;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .cat-name {
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 2rem;
+    }
+
+    .cat-age {
+        color: #666;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+
+    .cat-description {
+        color: #444;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .adopt-button {
+        display: inline-block;
+        padding: 12px 30px;
+        background-color: #0056b3;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 500;
+        border: 2px solid #0056b3;
+        transition: all 0.3s ease;
+    }
+
+    .adopt-button:hover {
+        background-color: #003d80;
+        border-color: #003d80;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,86,179,0.3);
+    }
+
+    .adopted-message {
+        padding: 15px 25px;
+        background-color: #f8f9fa;
+        border-radius: 6px;
+        color: #666;
+        text-align: center;
+        font-size: 1.1rem;
+    }
+        .admin-buttons {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .admin-button {
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .edit-button {
+        background-color: #28a745;
+        color: white;
+        border: 2px solid #28a745;
+    }
+
+    .edit-button:hover {
+        background-color: #218838;
+        border-color: #218838;
+        color: white;
+    }
+
+    .delete-button {
+        background-color: #dc3545;
+        color: white;
+        border: 2px solid #dc3545;
+    }
+
+    .delete-button:hover {
+        background-color: #c82333;
+        border-color: #c82333;
+        color: white;
+    }
+
+    .status-button {
+        background-color: #17a2b8;
+        color: white;
+        border: 2px solid #17a2b8;
+    }
+
+    .status-button:hover {
+        background-color: #138496;
+        border-color: #138496;
+        color: white;
+    }
+
+</style>
+
+<div class="cat-detail-container">
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% endif %}
+    <img src="{{ cat.photo.url }}" alt="{{ cat.name }}" class="cat-detail-image">
+    <div class="cat-info">
+        <h1 class="cat-name">{{ cat.name }}</h1>
+        <p class="cat-age">Возраст: {{ cat.age }} лет</p>
+        <p class="cat-description">{{ cat.description }}</p>
+
+        {% if not cat.is_adopted %}
+            <a href="{% url 'adopt_cat' cat.id %}" class="adopt-button">Хочу усыновить!</a>
+        {% else %}
+            <div class="adopted-message">
+                <p>Этот котик уже нашел свой дом ❤️</p>
+            </div>
+        {% endif %}
+        {% if user.is_staff %}
+    <div class="admin-buttons">
+        <a href="{% url 'edit_cat' cat.id %}" class="admin-button edit-button">
+            <i class="fas fa-edit"></i> Изменить
+        </a>
+        <a href="{% url 'toggle_adoption' cat.id %}" class="admin-button status-button">
+            <i class="fas fa-home"></i>
+            {% if cat.is_adopted %}
+                Отменить усыновление
+            {% else %}
+                Отметить как усыновленного
+            {% endif %}
+        </a>
+        <a href="{% url 'delete_cat' cat.id %}" class="admin-button delete-button"
+           onclick="return confirm('Вы уверены, что хотите удалить этого кота?');">
+            <i class="fas fa-trash"></i> Удалить
+        </a>
+    </div>
+    {% endif %}
+
+    </div>
+</div>
+{% endblock %}

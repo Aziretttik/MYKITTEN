@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Заявки на усыновление{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Заявки на усыновление</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-primary">
+                <tr>
+                    <th>Дата заявки</th>
+                    <th>Пользователь</th>
+                    <th>Котик</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in requests %}
+                <tr>
+                    <td>{{ request.created_at|date:"d.m.Y H:i" }}</td>
+                    <td>{{ request.user.email }}</td>
+                    <td>
+                        <a href="{% url 'cat_detail' request.cat.id %}">
+                            {{ request.cat.name }}
+                        </a>
+                    </td>
+                    <td>
+                        <span class="badge {% if request.status == 'pending' %}bg-warning
+                            {% elif request.status == 'approved' %}bg-success
+                            {% elif request.status == 'rejected' %}bg-danger
+                            {% endif %}">
+                            {% if request.status == 'pending' %}На рассмотрении
+                            {% elif request.status == 'approved' %}Одобрено
+                            {% elif request.status == 'rejected' %}Отклонено
+                            {% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        <form method="POST" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="request_id" value="{{ request.id }}">
+                            <div class="btn-group">
+                                <button type="submit" name="status" value="approved"
+                                        class="btn btn-sm btn-success"
+                                        {% if request.status == 'approved' %}disabled{% endif %}>
+                                    Одобрить
+                                </button>
+                                <button type="submit" name="status" value="rejected"
+                                        class="btn btn-sm btn-danger"
+                                        {% if request.status == 'rejected' %}disabled{% endif %}>
+                                    Отклонить
+                                </button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">Заявок пока нет</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,95 @@
+/* Общие стили */
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.8;
+}
+
+/* Стили для loader */
+.loader_container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loader {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #0d6efd;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Footer стили */
+.footer_section {
+    background-color: #f8f9fa;
+    padding: 60px 0 20px;
+    margin-top: 50px;
+}
+
+.footer-content {
+    margin-bottom: 30px;
+}
+
+.footer_detail h4,
+.footer_contact h4,
+.footer_social h4 {
+    margin-bottom: 20px;
+    color: #0d2d62;
+    font-weight: 600;
+}
+
+.footer_detail p {
+    color: #666;
+}
+
+.contact_link_box p {
+    margin: 10px 0;
+    color: #666;
+}
+
+.contact_link_box i {
+    margin-right: 10px;
+    color: #0d6efd;
+}
+
+.social-links a {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    background: #0d6efd;
+    color: white;
+    text-align: center;
+    line-height: 35px;
+    border-radius: 50%;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    background: #0b5ed7;
+    transform: translateY(-3px);
+}
+
+.footer-info {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+}
+
+.footer-info p {
+    color: #666;
+    margin: 0;
+}

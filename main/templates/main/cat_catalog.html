@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% block title %}Каталог котиков{% endblock %}
+
+{% block content %}
+<style>
+.cat-image {
+    height: 250px; /* фиксированная высота для изображения */
+    object-fit: cover; /* чтобы изображение сохраняло пропорции */
+    width: 100%;
+}
+.age-filter .form-select {
+        min-width: 200px;
+        background-color: white;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        box-shadow: none;
+    }
+
+    .age-filter .form-select:focus {
+        border-color: #0056b3;
+        box-shadow: 0 0 5px rgba(0,86,179,0.2);
+    }
+
+    .age-filter .form-select:hover {
+        border-color: #0056b3;
+    }
+
+    @media (max-width: 768px) {
+        .d-flex.justify-content-between {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .age-filter {
+            width: 100%;
+        }
+
+        .age-filter .form-select {
+            width: 100%;
+        }
+    }
+
+.cat-image {
+        height: 250px;
+        object-fit: cover;
+        width: 100%;
+    }
+    /* ... существующие стили ... */
+
+    /* Добавляем новые стили для пагинации */
+    .pagination-container {
+        margin-top: 30px;
+    }
+
+    .pagination .page-link {
+        color: #0056b3;
+        border: 1px solid #dee2e6;
+        padding: 8px 16px;
+        margin: 0 4px;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+
+    .pagination .page-link:hover {
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+        color: #0056b3;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #0056b3;
+        border-color: #0056b3;
+        color: white;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        pointer-events: none;
+        background-color: #fff;
+        border-color: #dee2e6;
+    }
+
+.cat-card {
+    transition: transform 0.2s;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.cat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.card-title {
+    color: #333;
+    font-size: 1.25rem;
+}
+
+.card-text {
+    color: #666;
+}
+</style>
+<div class="container mt-4">
+    {% if user.is_staff %}
+        <div class="text-center mb-4">
+            <a href="{% url 'add_cat' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Добавить нового котика
+            </a>
+        </div>
+    {% endif %}
+    <div class="age-filter">
+    <select class="form-select" id="ageFilter" onchange="filterByAge(this.value)" style="border-radius: 20px; border: 2px solid #e0e0e0; padding: 8px 15px; cursor: pointer;">
+        <option value="" {% if not age_filter %}selected{% endif %}>Все возрасты</option>
+        <option value="young" {% if age_filter == 'young' %}selected{% endif %}>До 3 лет</option>
+        <option value="adult" {% if age_filter == 'adult' %}selected{% endif %}>От 3 до 6 лет</option>
+        <option value="senior" {% if age_filter == 'senior' %}selected{% endif %}>Старше 6 лет</option>
+    </select>
+</div>
+
+
+
+    {% if search_query %}
+    <div class="search-results-info mb-4">
+        <h4>Результаты поиска по запросу: "{{ search_query }}"</h4>
+        {% if not cats %}
+            <p>К сожалению, по вашему запросу ничего не найдено.</p>
+        {% endif %}
+    </div>
+{% endif %}
+
+
+    <h1 class="text-center mb-4">Наши котики</h1>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for cat in cats %}
+        <div class="col">
+            <a href="{% url 'cat_detail' cat.id %}" class="text-decoration-none">
+                <div class="card h-100 cat-card">
+                    <img src="{{ cat.photo.url }}" class="card-img-top cat-image" alt="{{ cat.name }}">
+                    <div class="card-body">
+                        <h3 class="card-title">{{ cat.name }}</h3>
+                        <p class="card-text">Возраст: {{ cat.age }} лет</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p>Пока нет доступных котиков</p>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- Пагинация -->
+    {% if cats.has_other_pages %}
+    <div class="pagination-container text-center mt-4 mb-4">
+        <nav aria-label="Навигация по страницам">
+            <ul class="pagination justify-content-center">
+                {% if cats.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ cats.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" aria-label="Предыдущая">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&laquo;</span>
+                    </li>
+                {% endif %}
+
+                {% for num in cats.paginator.page_range %}
+                    {% if cats.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if cats.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ cats.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}" aria-label="Следующая">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&raquo;</span>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+
+</div>
+<script>
+function filterByAge(value) {
+    let currentUrl = new URL(window.location.href);
+    let searchParams = new URLSearchParams(currentUrl.search);
+
+    if (value) {
+        searchParams.set('age', value);
+    } else {
+        searchParams.delete('age');
+    }
+
+    // Сохраняем поисковый запрос если он есть
+    if ('{{ search_query }}') {
+        searchParams.set('q', '{{ search_query }}');
+    }
+
+    // Сбрасываем страницу на первую при изменении фильтра
+    searchParams.delete('page');
+
+    window.location.href = `${currentUrl.pathname}?${searchParams.toString()}`;
+}
+</script>
+
+{% endblock %}
